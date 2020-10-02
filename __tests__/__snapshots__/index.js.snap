@@ -1,0 +1,92 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`unknown plugin basic: basic 1`] = `
+
+import { rec } from '../../rewec.macro'
+
+console.log(rec(function sumTo(num){
+  return num <= 0 ? 0 : num + sumTo(num - 1);
+}, 1e7));
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+console.log(
+  rec(function sumTo(num) {
+    return num <= 0 ? 0 : num + sumTo(num - 1);
+  }, 1e7)
+);
+
+
+`;
+
+exports[`unknown plugin multipleRecs: multipleRecs 1`] = `
+
+import { rec } from '../../rewec.macro'
+
+console.log(rec(function sumTo(num){
+  return num <= 0 ? 0 : num + sumTo(num - 1);
+}, 1e7));
+console.log(rec(function fib(num){
+  return num <= 1 ? num : fib(num - 1) + fib(num - 2)
+}, 1e7));
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+console.log(
+  rec(function sumTo(num) {
+    return num <= 0 ? 0 : num + sumTo(num - 1);
+  }, 1e7)
+);
+console.log(
+  rec(function fib(num) {
+    return num <= 1 ? num : fib(num - 1) + fib(num - 2);
+  }, 1e7)
+);
+
+
+`;
+
+exports[`unknown plugin multipleReferencesInOneRec: multipleReferencesInOneRec 1`] = `
+
+import { rec } from '../../rewec.macro'
+
+console.log(rec(function fib(num){
+  return num <= 1 ? num : fib(num - 1) + fib(num - 2)
+}, 1e7));
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+console.log(
+  rec(function fib(num) {
+    return num <= 1 ? num : fib(num - 1) + fib(num - 2);
+  }, 1e7)
+);
+
+
+`;
+
+exports[`unknown plugin nested: nested 1`] = `
+
+import { rec } from '../../rewec.macro'
+
+console.log(rec(function sumTo(num){
+  const f = rec(function fib(num){
+    return num <= 1 ? num : fib(num - 1) + fib(num - 2)
+  }, 1e5);
+
+  return num <= 0 ? 0 : num + sumTo(num - 1);
+}, 1e7));
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+console.log(
+  rec(function sumTo(num) {
+    const f = rec(function fib(num) {
+      return num <= 1 ? num : fib(num - 1) + fib(num - 2);
+    }, 1e5);
+    return num <= 0 ? 0 : num + sumTo(num - 1);
+  }, 1e7)
+);
+
+
+`;
